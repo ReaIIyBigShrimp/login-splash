@@ -75,16 +75,16 @@
                 console.log('Setting mesh position...');
                 mesh.position.set(0,0,0);
                 // Sphere
-                blenderMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
-
+                // Returns warning. Not an error, so woo!
+                //blenderMaterial = new THREE.MeshFaceMaterial({color: 0xffffff});
+                // Fine, I'll use an array instead.
+                // Note - Find a way to mount materials to mesh
+                blenderMaterials = [];
+                blenderMaterials[0] = new THREE.MeshFaceMaterial();
+                // Append more materials soon.
+                console.log("Defining global variables...");
                 var model, sphereModel;
-                function blenderModel() {
-                    /* sphere = new THREE.SphereGeometry(12,16,16);
-                    sphereMaterial = new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true});
-                    sphereMesh = new THREE.Mesh(sphere, sphereMaterial);
-                    scene.add(sphereMesh);
-                    sphereMesh.position.set(0,0,0); */
-
+                function sceneSetup() {
                     // LIGHTS 
                     // ------
                     // Ambient light #1
@@ -94,15 +94,17 @@
                     var light = new THREE.PointLight(0xFFFFDD);
                     light.position.set(-15,10,15);
                     scene.add(light);
-                    // Load blender export
+                    // Loader
+                    // Load Blender model
+                    console.log("JSON Engaged");
                     var loader = new THREE.JSONLoader();
                     loader.load("test_corrected.json", addModelToScene);
                 }
-                blenderModel();
+                sceneSetup();
                 // Add Blender model to scene
                 function addModelToScene (geometry) {
-                    model = new THREE.Mesh(geometry, blenderMaterial);
-                    model.scale.set(40,40,40);
+                    model = new THREE.Mesh(geometry);
+                    model.scale.set(32,32,32);
                     scene.add(model);
                 }
                 // Create renderer
@@ -117,7 +119,8 @@
                 loginDiv.appendChild(renderer.domElement);
                 animate();
             };
-            // Animation
+            // Animation 
+            // Updates every frame
             function animate(){
                 requestAnimationFrame(animate);
                 mesh.rotation.x += 0.01;
